@@ -63,7 +63,7 @@ setup(
         'django-grappelli<2.11',
         'django-npm',
         'django-recurrence',
-        'djangorestframework',
+        'djangorestframework<3.10',
         'python-dateutil',
         'pytz',
     ],
