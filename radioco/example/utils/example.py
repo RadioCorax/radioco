@@ -51,7 +51,8 @@ def create_example_data():
             category='News & Politics',))
 
     slot, created = Slot.objects.get_or_create(
-        programme=programme, runtime=datetime.timedelta(minutes=60))
+        programme=programme,
+        runtime=datetime.timedelta(minutes=60))
 
     recurrences = recurrence.Recurrence(
         dtstart=timezone.make_aware(datetime.datetime(2015, 1, 1, 8, 0, 0)),
@@ -62,7 +63,9 @@ def create_example_data():
         rrules=[recurrence.Rule(recurrence.DAILY)])
 
     Schedule.objects.get_or_create(
-        slot=slot, type='L', recurrences=recurrences)
+        slot=slot,
+        type='L',
+        recurrences=recurrences)
 
     Schedule.objects.get_or_create(
         slot=slot,
