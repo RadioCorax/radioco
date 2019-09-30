@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404
 
 from rest_framework import permissions, viewsets
-from rest_framework.decorators import list_route
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from django_filters.fields import IsoDateTimeField
@@ -75,7 +75,7 @@ class TransmissionViewSet(viewsets.GenericViewSet):
             transmissions, many=True, context={'request': request})
         return Response(serializer.data)
 
-    @list_route()
+    @action(detail=False)
     def now(self, request):
         _now = timezone.now()
         transmissions = Transmission.at(_now)

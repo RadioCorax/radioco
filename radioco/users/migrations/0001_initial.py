@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
                 ('avatar', models.ImageField(default=b'/static/radio/images/default-userprofile-avatar.jpg', upload_to=b'avatars/', verbose_name='avatar')),
                 ('display_personal_page', models.BooleanField(default=False, verbose_name='display personal page')),
                 ('slug', models.SlugField(max_length=30)),
-                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)),
             ],
             options={
                 'default_permissions': ('change',),

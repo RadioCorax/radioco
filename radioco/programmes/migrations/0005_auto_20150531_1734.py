@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='podcast',
             name='episode',
-            field=models.OneToOneField(related_name='podcast', primary_key=True, serialize=False, to='programmes.Episode'),
+            field=models.OneToOneField(related_name='podcast', primary_key=True, serialize=False, to='programmes.Episode', on_delete=models.CASCADE),
             preserve_default=True,
         ),
     ]

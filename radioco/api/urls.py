@@ -9,7 +9,8 @@ router.register(r'programmes', views.ProgrammeViewSet)
 router.register(r'slots', views.SlotViewSet)
 router.register(r'episodes', views.EpisodeViewSet)
 router.register(r'schedules', views.ScheduleViewSet)
-router.register(
-    r'transmissions', views.TransmissionViewSet, base_name='transmission')
+router.register(r'transmissions', views.TransmissionViewSet, base_name='transmission')
 
 urlpatterns = router.urls
+
+app_name = 'api'

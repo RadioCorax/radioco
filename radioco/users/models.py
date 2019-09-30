@@ -17,15 +17,15 @@
 
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, unique=True)
+    user = models.OneToOneField(User, unique=True, on_delete=models.CASCADE)
     bio = RichTextField(blank=True, verbose_name=_("biography"))
     avatar = models.ImageField(
         upload_to='avatars/', default='defaults/default-userprofile-avatar.jpg', verbose_name=_("avatar")

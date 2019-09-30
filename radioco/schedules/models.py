@@ -23,11 +23,12 @@ from recurrence.fields import RecurrenceField
 from radioco.programmes.models import Episode, Programme
 from radioco.schedules import recurrence
 
+from pytz.exceptions import NonExistentTimeError
+
 recurrence.patch()
 
-
 class Slot(models.Model):
-    programme = models.ForeignKey(Programme, verbose_name=_("programme"))
+    programme = models.ForeignKey(Programme, verbose_name=_("programme"), on_delete=models.CASCADE)
     runtime = models.DurationField(
         verbose_name=_("runtime"), help_text=_("runtime in seconds"))
 
@@ -53,7 +54,7 @@ class Schedule(models.Model):
         verbose_name = _('schedule')
         verbose_name_plural = _('schedules')
 
-    slot = models.ForeignKey(Slot, verbose_name=_("slot"))
+    slot = models.ForeignKey(Slot, verbose_name=_("slot"), on_delete=models.CASCADE)
     type = models.CharField(
         verbose_name=_("type"), choices=SCHEDULE_TYPE, max_length=1)
     recurrences = RecurrenceField(verbose_name=_("recurrences"))
@@ -138,9 +139,11 @@ class Transmission(object):
                 _episodes = Episode.objects.filter(
                     programme=self.programme,
                     issue_date__lt=self.start)
+
                 return _episodes.latest('issue_date')
 
             return Episode.objects.get(
                 programme=self.programme, issue_date=self.start)
-        except Episode.DoesNotExist:
+
+        except (Episode.DoesNotExist, NonExistentTimeError):
             return None

@@ -18,11 +18,11 @@ from ckeditor.fields import RichTextField
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.db import transaction
 from django.db.models import Q
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -164,7 +164,7 @@ class Episode(models.Model):
         max_length=100, blank=True, null=True, verbose_name=_("title"))
     people = models.ManyToManyField(
         User, blank=True, through='Participant', verbose_name=_("people"))
-    programme = models.ForeignKey(Programme, verbose_name=_("programme"))
+    programme = models.ForeignKey(Programme, verbose_name=_("programme"), on_delete=models.CASCADE)
     summary = RichTextField(blank=True, verbose_name=_("summary"))
     issue_date = models.DateTimeField(
         blank=True, null=True, db_index=True, verbose_name=_('issue date'))
@@ -182,8 +182,8 @@ class Episode(models.Model):
 
 
 class Participant(models.Model):
-    person = models.ForeignKey(User, verbose_name=_("person"))
-    episode = models.ForeignKey(Episode, verbose_name=_("episode"))
+    person = models.ForeignKey(User, verbose_name=_("person"), on_delete=models.CASCADE)
+    episode = models.ForeignKey(Episode, verbose_name=_("episode"), on_delete=models.CASCADE)
     role = models.CharField(default=NOT_SPECIFIED,
                             verbose_name=_("role"),
                             choices=ROLES,
@@ -203,8 +203,8 @@ class Participant(models.Model):
 
 
 class Role(models.Model):
-    person = models.ForeignKey(User, verbose_name=_("person"))
-    programme = models.ForeignKey(Programme, verbose_name=_("programme"))
+    person = models.ForeignKey(User, verbose_name=_("person"), on_delete=models.CASCADE)
+    programme = models.ForeignKey(Programme, verbose_name=_("programme"), on_delete=models.CASCADE)
     role = models.CharField(default=NOT_SPECIFIED,
                             verbose_name=_("role"),
                             choices=ROLES,
@@ -226,7 +226,7 @@ class Role(models.Model):
 
 class Podcast(models.Model):
     episode = models.OneToOneField(
-        Episode, primary_key=True, related_name='podcast')
+        Episode, primary_key=True, related_name='podcast', on_delete=models.CASCADE)
     url = models.CharField(max_length=2048)
     mime_type = models.CharField(max_length=20)
     length = models.PositiveIntegerField()  # bytes
