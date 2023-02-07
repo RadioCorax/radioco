@@ -20,6 +20,7 @@ import re
 from django import forms
 from django.conf.urls import url
 from django.contrib import admin
+from django.contrib.auth import get_user
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.core import validators
@@ -109,7 +110,8 @@ class SingletonProfileAdmin(admin.ModelAdmin):
         return False
 
     def has_delete_permission(self, request, obj=None):
-        return False
+        _current_user = get_user(request)
+        return _current_user.is_active and _current_user.is_superuser
 
     def get_urls(self):
         urls = super(SingletonProfileAdmin, self).get_urls()
