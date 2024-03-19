@@ -34,8 +34,8 @@ Open a terminal and run the following commands::
 
     git clone https://github.com/RadioCorax/radioco
     cd radioco
-    virtualenv --python=python3 .
-    ./bin/python setup.py install
+    python3 -m venv .
+    ./bin/pip install -r requirements.txt -e .
     npm install
     ./bin/python manage.py collectstatic
     ./bin/python manage.py create_example_data
@@ -50,7 +50,7 @@ Run Tests
 *********
 Open a terminal and run the following commands::
 
-    ./bin/python setup.py test
+    ./bin/python manage.py test radioco
 
 or
 

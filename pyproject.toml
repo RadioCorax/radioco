@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "radioco"
+authors = [
+  {name = "Iago Veloso Abelo"},
+  {name = "Stefan Walluhn"},
+]
+version = "3.0.0"
+readme = "README.rst"
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Environment :: Web Environment",
+  "Framework :: Django",
+  "Intended Audience :: Developers",
+  "Intended Audience :: End Users/Desktop",
+  "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Topic :: Internet :: WWW/HTTP",
+  "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+  "Topic :: Software Development",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+]
+dependencies = [
+  "Django<3.3",
+  "Pillow",
+  "django-ckeditor",
+  "django-disqus",
+  "django-filebrowser<4",
+  "django-filter<3",
+  "django-grappelli<2.16",
+  "django-npm",
+  "django-recurrence",
+  "djangorestframework<3.15",
+  "python-dateutil",
+]
+
+[project.urls]
+Repository = "https://github.com/RadioCorax/radioco"
