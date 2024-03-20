@@ -25,7 +25,7 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.contrib import admin
 from django.forms import ValidationError
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 from radioco.programmes.models import (

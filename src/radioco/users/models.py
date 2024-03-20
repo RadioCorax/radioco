@@ -21,7 +21,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.template.defaultfilters import slugify
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 
 class UserProfile(models.Model):

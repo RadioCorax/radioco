@@ -1,10 +1,10 @@
-asgiref==3.7.2
-Django==3.2.25
+asgiref==3.8.0
+Django==4.2.11
 django-ckeditor==6.7.1
 django-disqus==0.5
-django-filebrowser==3.14.3
-django-filter==2.4.0
-django-grappelli==2.15.7
+django-filebrowser==4.0.3
+django-filter==24.1
+django-grappelli==3.0.8
 django-js-asset==2.2.0
 django-npm==1.0.0
 django-recurrence==1.11.1

@@ -18,20 +18,17 @@
 import re
 
 from django import forms
-from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.core import validators
 from django.http import HttpResponseRedirect
-from django.utils.translation import ugettext_lazy as _
+from django.urls import re_path
+from django.utils.encoding import force_str
+from django.utils.translation import gettext_lazy as _
 
 from radioco.users.models import UserProfile
 
-try:
-    from django.utils.encoding import force_unicode
-except ImportError:
-    from django.utils.encoding import force_text as force_unicode
 
 
 # USER
@@ -118,19 +115,20 @@ class SingletonProfileAdmin(admin.ModelAdmin):
             'model_name': self.model._meta.model_name,
         }
         custom_urls = [
-            url(r'^history/$',
-                self.admin_site.admin_view(self.history_view),
-                {'object_id': '-1'},
-                name='%s_history' % url_name_prefix),
-            url(r'^$',
-                self.admin_site.admin_view(self.change_view),
-                {'object_id': '-1'},
-                name='%s_change' % url_name_prefix)]
+            re_path(r'^history/$',
+                    self.admin_site.admin_view(self.history_view),
+                    {'object_id': '-1'},
+                    name='%s_history' % url_name_prefix),
+            re_path(r'^$',
+                    self.admin_site.admin_view(self.change_view),
+                    {'object_id': '-1'},
+                    name='%s_change' % url_name_prefix)
+        ]
         # By inserting the custom URLs first, we overwrite the standard URLs.
         return custom_urls + urls
 
     def response_change(self, request, obj):
-        msg = _('%(obj)s was changed successfully.') % {'obj': force_unicode(obj)}
+        msg = _('%(obj)s was changed successfully.') % {'obj': force_str(obj)}
         if '_continue' in request.POST:
             # self.message_user(request, msg + ' ' + _('You may edit it again below.'))
             return HttpResponseRedirect(request.path)

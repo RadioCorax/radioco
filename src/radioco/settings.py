@@ -202,3 +202,7 @@ PROGRAMME_LANGUAGES = (
 # Admin
 GRAPPELLI_ADMIN_HEADLINE = 'RadioCo'
 GRAPPELLI_ADMIN_TITLE = 'RadioCo'
+
+# XXX needed for proper time handling on DST switches,
+# e.g. datetime(2024, 3, 31, 2, 30, tzinfo=ZoneInfo(key='Europe/Berlin'))
+USE_DEPRECATED_PYTZ = True
