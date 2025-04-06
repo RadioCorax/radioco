@@ -65,6 +65,7 @@ setup(
         'djangorestframework',
         'python-dateutil',
         'pytz',
+        'whitenoise<6.8',
     ],
     tests_require=['mock'],
     test_suite = "radioco.test.runner.runtests",
