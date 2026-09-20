@@ -16,28 +16,28 @@
 
 
 import datetime
+
 import mock
 import recurrence
-
 from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils import timezone
 
 from radioco.programmes.models import Programme
 from radioco.schedules import utils
-from radioco.schedules.models import Slot, Schedule, Transmission
+from radioco.schedules.models import Schedule, Slot, Transmission
 from radioco.test.utils import TestDataMixin, now
 
 
 class SlotModelTests(TestCase):
     def setUp(self):
         self.programme = Programme.objects.create(
-            name="Test programme",
-            synopsis="This is a description",
-            current_season=8)
+            name="Test programme", synopsis="This is a description", current_season=8
+        )
 
         self.slot = Slot.objects.create(
-            programme=self.programme, runtime=datetime.timedelta(minutes=60))
+            programme=self.programme, runtime=datetime.timedelta(minutes=60)
+        )
 
     def test_model_manager(self):
         self.assertIsInstance(self.slot, Slot)
@@ -70,12 +70,12 @@ class ScheduleModelTests(TestDataMixin, TestCase):
         self.recurrences = recurrence.Recurrence(
             dtstart=datetime.datetime(2014, 1, 6, 14, 0, 0),
             dtend=datetime.datetime(2014, 1, 31, 14, 0, 0),
-            rrules=[recurrence.Rule(recurrence.WEEKLY)])
+            rrules=[recurrence.Rule(recurrence.WEEKLY)],
+        )
 
         self.schedule = Schedule.objects.create(
-            slot=self.slot,
-            type='L',
-            recurrences=self.recurrences)
+            slot=self.slot, type="L", recurrences=self.recurrences
+        )
 
     def test_runtime(self):
         self.assertEqual(datetime.timedelta(hours=+1), self.schedule.runtime)
@@ -89,57 +89,67 @@ class ScheduleModelTests(TestDataMixin, TestCase):
         self.assertEqual(schedule.start, datetime.datetime(2014, 1, 6, 14, 0))
 
     def test_start(self):
-        self.assertEqual(
-            self.schedule.start, datetime.datetime(2014, 1, 6, 14, 0, 0))
+        self.assertEqual(self.schedule.start, datetime.datetime(2014, 1, 6, 14, 0, 0))
 
     def test_set_start(self):
         self.schedule.start = datetime.datetime(2015, 1, 1, 14, 0, 0)
-        self.assertEqual(self.schedule.recurrences.dtstart,
-                         datetime.datetime(2015, 1, 1, 14, 0, 0))
+        self.assertEqual(
+            self.schedule.recurrences.dtstart, datetime.datetime(2015, 1, 1, 14, 0, 0)
+        )
 
     def test_start_none(self):
         schedule = Schedule(slot=Slot())
         self.assertIsNone(schedule.start)
 
     def test_end(self):
-        self.assertEqual(
-            self.schedule.end, datetime.datetime(2014, 1, 6, 15, 0))
+        self.assertEqual(self.schedule.end, datetime.datetime(2014, 1, 6, 15, 0))
 
     def test_end_none(self):
         schedule = Schedule(slot=Slot())
         self.assertIsNone(schedule.end)
 
     def test_recurrence_rules(self):
-        self.assertListEqual(
-            self.schedule.recurrences.rrules, self.recurrences.rrules)
+        self.assertListEqual(self.schedule.recurrences.rrules, self.recurrences.rrules)
 
     def test_date_before(self):
         self.assertEqual(
             self.schedule.date_before(
-                timezone.make_aware(datetime.datetime(2014, 1, 14))),
-            timezone.make_aware(datetime.datetime(2014, 1, 13, 14, 0)))
+                timezone.make_aware(datetime.datetime(2014, 1, 14))
+            ),
+            timezone.make_aware(datetime.datetime(2014, 1, 13, 14, 0)),
+        )
 
     def test_no_date_before(self):
-        self.assertIsNone(self.schedule.date_before(
-            timezone.make_aware(datetime.datetime(2010, 1, 14))))
+        self.assertIsNone(
+            self.schedule.date_before(
+                timezone.make_aware(datetime.datetime(2010, 1, 14))
+            )
+        )
 
     def test_date_after(self):
         self.assertEqual(
             self.schedule.date_after(datetime.datetime(2014, 1, 14)),
-            timezone.make_aware(datetime.datetime(2014, 1, 20, 14, 0)))
+            timezone.make_aware(datetime.datetime(2014, 1, 20, 14, 0)),
+        )
 
     def test_date_after_exclude(self):
         self.assertEqual(
-            self.schedule.date_after(
-                datetime.datetime(2014, 1, 6, 14, 0), inc=False),
-            timezone.make_aware(datetime.datetime(2014, 1, 13, 14, 0)))
+            self.schedule.date_after(datetime.datetime(2014, 1, 6, 14, 0), inc=False),
+            timezone.make_aware(datetime.datetime(2014, 1, 13, 14, 0)),
+        )
 
     def test_dates_between(self):
         self.assertListEqual(
-            list(self.schedule.dates_between(datetime.datetime(2014, 1, 1),
-                                             datetime.datetime(2014, 1, 14))),
-            [timezone.make_aware(datetime.datetime(2014, 1, 6, 14, 0)),
-             timezone.make_aware(datetime.datetime(2014, 1, 13, 14, 0))])
+            list(
+                self.schedule.dates_between(
+                    datetime.datetime(2014, 1, 1), datetime.datetime(2014, 1, 14)
+                )
+            ),
+            [
+                timezone.make_aware(datetime.datetime(2014, 1, 6, 14, 0)),
+                timezone.make_aware(datetime.datetime(2014, 1, 13, 14, 0)),
+            ],
+        )
 
     def test_dates_between_complex_ruleset(self):
         schedule = Schedule(
@@ -147,15 +157,26 @@ class ScheduleModelTests(TestDataMixin, TestCase):
             recurrences=recurrence.Recurrence(
                 dtstart=datetime.datetime(2014, 1, 2, 14, 0, 0),
                 rrules=[recurrence.Rule(recurrence.DAILY, interval=2)],
-                exrules=[recurrence.Rule(
-                    recurrence.WEEKLY, byday=[recurrence.MO, recurrence.TU])]))
+                exrules=[
+                    recurrence.Rule(
+                        recurrence.WEEKLY, byday=[recurrence.MO, recurrence.TU]
+                    )
+                ],
+            ),
+        )
 
         self.assertListEqual(
-            list(schedule.dates_between(datetime.datetime(2014, 1, 1),
-                                        datetime.datetime(2014, 1, 9))),
-            [timezone.make_aware(datetime.datetime(2014, 1, 2, 14, 0)),
-             timezone.make_aware(datetime.datetime(2014, 1, 4, 14, 0)),
-             timezone.make_aware(datetime.datetime(2014, 1, 8, 14, 0))])
+            list(
+                schedule.dates_between(
+                    datetime.datetime(2014, 1, 1), datetime.datetime(2014, 1, 9)
+                )
+            ),
+            [
+                timezone.make_aware(datetime.datetime(2014, 1, 2, 14, 0)),
+                timezone.make_aware(datetime.datetime(2014, 1, 4, 14, 0)),
+                timezone.make_aware(datetime.datetime(2014, 1, 8, 14, 0)),
+            ],
+        )
 
     # hacky workaround, remove after upstream bug is solved
     # https://github.com/django-recurrence/django-recurrence/issues/94
@@ -165,14 +186,22 @@ class ScheduleModelTests(TestDataMixin, TestCase):
             recurrences=recurrence.Recurrence(
                 dtstart=datetime.datetime(2014, 1, 2, 14, 0, 0),
                 rrules=[recurrence.Rule(recurrence.DAILY, interval=2)],
-                rdates=[datetime.datetime(2014, 1, 5, 0, 0)]))
+                rdates=[datetime.datetime(2014, 1, 5, 0, 0)],
+            ),
+        )
 
         self.assertListEqual(
-            list(schedule.dates_between(datetime.datetime(2014, 1, 4),
-                                        datetime.datetime(2014, 1, 7))),
-            [timezone.make_aware(datetime.datetime(2014, 1, 4, 14, 0)),
-             timezone.make_aware(datetime.datetime(2014, 1, 5, 14, 0)),
-             timezone.make_aware(datetime.datetime(2014, 1, 6, 14, 0))])
+            list(
+                schedule.dates_between(
+                    datetime.datetime(2014, 1, 4), datetime.datetime(2014, 1, 7)
+                )
+            ),
+            [
+                timezone.make_aware(datetime.datetime(2014, 1, 4, 14, 0)),
+                timezone.make_aware(datetime.datetime(2014, 1, 5, 14, 0)),
+                timezone.make_aware(datetime.datetime(2014, 1, 6, 14, 0)),
+            ],
+        )
 
     # hacky workaround, remove after upstream bug is solved
     # https://github.com/django-recurrence/django-recurrence/issues/94
@@ -182,29 +211,39 @@ class ScheduleModelTests(TestDataMixin, TestCase):
             recurrences=recurrence.Recurrence(
                 dtstart=datetime.datetime(2014, 1, 2, 14, 0, 0),
                 rrules=[recurrence.Rule(recurrence.DAILY)],
-                exdates=[datetime.datetime(2014, 1, 5, 0, 0, 0)]))
+                exdates=[datetime.datetime(2014, 1, 5, 0, 0, 0)],
+            ),
+        )
 
         self.assertListEqual(
-            list(schedule.dates_between(datetime.datetime(2014, 1, 4),
-                                        datetime.datetime(2014, 1, 7))),
-            [timezone.make_aware(datetime.datetime(2014, 1, 4, 14, 0)),
-             timezone.make_aware(datetime.datetime(2014, 1, 6, 14, 0))])
+            list(
+                schedule.dates_between(
+                    datetime.datetime(2014, 1, 4), datetime.datetime(2014, 1, 7)
+                )
+            ),
+            [
+                timezone.make_aware(datetime.datetime(2014, 1, 4, 14, 0)),
+                timezone.make_aware(datetime.datetime(2014, 1, 6, 14, 0)),
+            ],
+        )
 
     def test_str(self):
-        self.assertEqual(str(self.schedule), 'Monday - 14:00:00')
+        self.assertEqual(str(self.schedule), "Monday - 14:00:00")
 
-    @mock.patch('django.utils.timezone.now', now)
+    @mock.patch("django.utils.timezone.now", now)
     def test_save_rearange_episodes(self):
         self.assertEqual(
             self.episode.issue_date,
-            timezone.make_aware(datetime.datetime(2015, 1, 1, 14, 0)))
+            timezone.make_aware(datetime.datetime(2015, 1, 1, 14, 0)),
+        )
 
         self.schedule.save()
         self.episode.refresh_from_db()
 
         self.assertEqual(
             self.episode.issue_date,
-            timezone.make_aware(datetime.datetime(2014, 1, 6, 14, 0)))
+            timezone.make_aware(datetime.datetime(2014, 1, 6, 14, 0)),
+        )
 
     def test_validation_slot_invalid(self):
         self.schedule.slot = None
@@ -223,13 +262,12 @@ class ScheduleModelTests(TestDataMixin, TestCase):
 class TransmissionModelTests(TestDataMixin, TestCase):
     def setUp(self):
         self.transmission = Transmission(
-            self.schedule,
-            timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 0, 0)))
+            self.schedule, timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 0, 0))
+        )
 
     def test_nonexistent_date(self):
         with self.assertRaises(ValueError):
-            Transmission(self.schedule,
-                         datetime.datetime(2015, 1, 6, 14, 30, 0))
+            Transmission(self.schedule, datetime.datetime(2015, 1, 6, 14, 30, 0))
 
     def test_programme(self):
         self.assertEqual(self.transmission.programme, self.programme)
@@ -237,85 +275,100 @@ class TransmissionModelTests(TestDataMixin, TestCase):
     def test_start(self):
         self.assertEqual(
             self.transmission.start,
-            timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 0, 0)))
+            timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 0, 0)),
+        )
 
     def test_end(self):
         self.assertEqual(
             self.transmission.end,
-            timezone.make_aware(datetime.datetime(2015, 1, 6, 15, 0, 0)))
+            timezone.make_aware(datetime.datetime(2015, 1, 6, 15, 0, 0)),
+        )
 
     def test_get_or_create_existent_episode(self):
         transmission = Transmission(
-            self.schedule,
-            timezone.make_aware(datetime.datetime(2015, 1, 1, 14, 0)))
+            self.schedule, timezone.make_aware(datetime.datetime(2015, 1, 1, 14, 0))
+        )
         self.assertEqual(transmission._get_or_create_episode(), self.episode)
 
     def test_get_or_create_repetition_episode(self):
         transmission = Transmission(
-            Schedule(slot=self.slot, type='R',
-                     recurrences=recurrence.Recurrence(
-                         dtstart=datetime.datetime(2015, 1, 1, 14, 30))),
-            timezone.make_aware(datetime.datetime(2015, 1, 1, 14, 30)))
+            Schedule(
+                slot=self.slot,
+                type="R",
+                recurrences=recurrence.Recurrence(
+                    dtstart=datetime.datetime(2015, 1, 1, 14, 30)
+                ),
+            ),
+            timezone.make_aware(datetime.datetime(2015, 1, 1, 14, 30)),
+        )
         self.assertEqual(transmission._get_or_create_episode(), self.episode)
 
     def test_get_or_create_nonexistent_episode(self):
         transmission = Transmission(
-            self.schedule,
-            timezone.make_aware(datetime.datetime(2016, 1, 1, 14, 0)))
+            self.schedule, timezone.make_aware(datetime.datetime(2016, 1, 1, 14, 0))
+        )
         episode = transmission._get_or_create_episode()
         self.assertIsNone(episode)
 
     def test_at(self):
         now = Transmission.at(
-            timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 30, 0)))
+            timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 30, 0))
+        )
         self.assertListEqual(
             [(t.programme.slug, t.start) for t in now],
-            [(u'classic-hits', timezone.make_aware(
-                datetime.datetime(2015, 1, 6, 14, 0)))])
+            [
+                (
+                    "classic-hits",
+                    timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 0)),
+                )
+            ],
+        )
 
     def test_between(self):
-        between = Transmission.between(datetime.datetime(2015, 1, 6, 12, 0, 0),
-                                       datetime.datetime(2015, 1, 6, 17, 0, 0))
+        between = Transmission.between(
+            datetime.datetime(2015, 1, 6, 12, 0, 0),
+            datetime.datetime(2015, 1, 6, 17, 0, 0),
+        )
         self.assertListEqual(
             [(t.programme.slug, t.start) for t in between],
             [
-                (u'the-best-wine', timezone.make_aware(
-                    datetime.datetime(2015, 1, 6, 12, 0))),
-                (u'local-gossips', timezone.make_aware(
-                    datetime.datetime(2015, 1, 6, 13, 0))),
-                (u'classic-hits', timezone.make_aware(
-                    datetime.datetime(2015, 1, 6, 14, 0)))])
-
-    def test_between_time_change_skip(self):
-        schedule = Schedule(
-            slot=self.slot,
-            recurrences=recurrence.Recurrence(
-                dtstart=datetime.datetime(2018, 3, 24, 2, 30, 0),
-                rrules=[recurrence.Rule(recurrence.DAILY)]))
-        between = Transmission.between(
-            datetime.datetime(2018, 3, 25, 0, 0, 0),
-            datetime.datetime(2018, 3, 25, 5, 0, 0),
-            schedules=[schedule])
-        self.assertEqual(list(between), [])
+                (
+                    "the-best-wine",
+                    timezone.make_aware(datetime.datetime(2015, 1, 6, 12, 0)),
+                ),
+                (
+                    "local-gossips",
+                    timezone.make_aware(datetime.datetime(2015, 1, 6, 13, 0)),
+                ),
+                (
+                    "classic-hits",
+                    timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 0)),
+                ),
+            ],
+        )
 
     def test_between_time_change_stable(self):
         schedule = Schedule(
             slot=self.slot,
             recurrences=recurrence.Recurrence(
                 dtstart=datetime.datetime(2018, 3, 24, 2, 30, 0),
-                rrules=[recurrence.Rule(recurrence.DAILY)]))
+                rrules=[recurrence.Rule(recurrence.DAILY)],
+            ),
+        )
         between = Transmission.between(
             timezone.make_aware(datetime.datetime(2018, 3, 24, 0, 0, 0)),
             timezone.make_aware(datetime.datetime(2018, 3, 26, 5, 0, 0)),
-            schedules=[schedule])
+            schedules=[schedule],
+        )
 
         self.assertListEqual(
+            [(timezone.make_naive(t.start), t.start.tzname()) for t in between],
             [
-                (timezone.make_naive(t.start),
-                 t.start.tzname()) for t in between],
-            [
-                (datetime.datetime(2018, 3, 24, 2, 30), 'CET'),
-                (datetime.datetime(2018, 3, 26, 2, 30), 'CEST')])
+                (datetime.datetime(2018, 3, 24, 2, 30), "CET"),
+                (datetime.datetime(2018, 3, 25, 2, 30), "CET"),
+                (datetime.datetime(2018, 3, 26, 2, 30), "CEST"),
+            ],
+        )
 
 
 class ScheduleUtilsTests(TestDataMixin, TestCase):
@@ -326,31 +379,34 @@ class ScheduleUtilsTests(TestDataMixin, TestCase):
             recurrences=recurrence.Recurrence(
                 dtstart=datetime.datetime(2015, 1, 6, 16, 0, 0),
                 dtend=datetime.datetime(2015, 1, 31, 16, 0, 0),
-                rrules=[recurrence.Rule(recurrence.WEEKLY)]))
+                rrules=[recurrence.Rule(recurrence.WEEKLY)],
+            ),
+        )
 
-        dates = utils.available_dates(
-            self.programme, datetime.datetime(2015, 1, 5))
+        dates = utils.available_dates(self.programme, datetime.datetime(2015, 1, 5))
 
         self.assertEqual(
-            next(dates),
-            timezone.make_aware(datetime.datetime(2015, 1, 5, 14, 0)))
+            next(dates), timezone.make_aware(datetime.datetime(2015, 1, 5, 14, 0))
+        )
         self.assertEqual(
-            next(dates),
-            timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 0)))
+            next(dates), timezone.make_aware(datetime.datetime(2015, 1, 6, 14, 0))
+        )
         self.assertEqual(
-            next(dates),
-            timezone.make_aware(datetime.datetime(2015, 1, 6, 16, 0)))
+            next(dates), timezone.make_aware(datetime.datetime(2015, 1, 6, 16, 0))
+        )
 
     def test_available_dates_none(self):
-        dates = utils.available_dates(
-            Programme(), datetime.datetime(2018, 3, 17, 0, 0))
+        programme = Programme(name="Another Name", current_season=1)
+        programme.save()
+
+        dates = utils.available_dates(programme, datetime.datetime(2018, 3, 17, 0, 0))
         with self.assertRaises(StopIteration):
             next(dates)
 
     def test_rearrenge_episodes(self):
         utils.rearrange_episodes(
-            self.programme,
-            timezone.make_aware(datetime.datetime(2015, 1, 1)))
+            self.programme, timezone.make_aware(datetime.datetime(2015, 1, 1))
+        )
 
         self.assertListEqual(
             [e.issue_date for e in self.programme.episode_set.all()[:5]],
@@ -359,7 +415,9 @@ class ScheduleUtilsTests(TestDataMixin, TestCase):
                 timezone.make_aware(datetime.datetime(2015, 1, 2, 14, 0)),
                 timezone.make_aware(datetime.datetime(2015, 1, 3, 14, 0)),
                 timezone.make_aware(datetime.datetime(2015, 1, 4, 14, 0)),
-                timezone.make_aware(datetime.datetime(2015, 1, 5, 14, 0))])
+                timezone.make_aware(datetime.datetime(2015, 1, 5, 14, 0)),
+            ],
+        )
 
     def test_rearrenge_episodes_new_schedule(self):
         Schedule.objects.create(
@@ -368,11 +426,13 @@ class ScheduleUtilsTests(TestDataMixin, TestCase):
             recurrences=recurrence.Recurrence(
                 dtstart=datetime.datetime(2015, 1, 3, 16, 0, 0),
                 dtend=datetime.datetime(2015, 1, 31, 16, 0, 0),
-                rrules=[recurrence.Rule(recurrence.WEEKLY)]))
+                rrules=[recurrence.Rule(recurrence.WEEKLY)],
+            ),
+        )
 
         utils.rearrange_episodes(
-            self.programme,
-            timezone.make_aware(datetime.datetime(2015, 1, 1)))
+            self.programme, timezone.make_aware(datetime.datetime(2015, 1, 1))
+        )
 
         self.assertListEqual(
             [e.issue_date for e in self.programme.episode_set.all()[:5]],
@@ -381,4 +441,6 @@ class ScheduleUtilsTests(TestDataMixin, TestCase):
                 timezone.make_aware(datetime.datetime(2015, 1, 2, 14, 0)),
                 timezone.make_aware(datetime.datetime(2015, 1, 3, 14, 0)),
                 timezone.make_aware(datetime.datetime(2015, 1, 3, 16, 0)),
-                timezone.make_aware(datetime.datetime(2015, 1, 4, 14, 0))])
+                timezone.make_aware(datetime.datetime(2015, 1, 4, 14, 0)),
+            ],
+        )
