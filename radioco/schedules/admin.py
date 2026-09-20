@@ -24,9 +24,11 @@ class SlotAdmin(admin.ModelAdmin):
     list_display = ('name', 'runtime')
     list_filter = ('programme__name', 'runtime')
 
+    @admin.display(
+        ordering='programme__name'
+    )
     def name(self, slot):
         return slot.programme.name
-    name.admin_order_field = 'programme__name'
 
 
 @admin.register(Schedule)

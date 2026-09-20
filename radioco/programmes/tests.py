@@ -93,7 +93,7 @@ class EpisodeManagerTests(TestDataMixin, TestCase):
             timezone.make_aware(datetime.datetime(2014, 6, 14, 10, 0, 0)))
 
     def test_people(self):
-        self.assertQuerysetEqual(
+        self.assertQuerySetEqual(
             self.episode.people.all(), self.programme.announcers.all())
 
     def test_last(self):

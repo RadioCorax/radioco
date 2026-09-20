@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.conf.urls import url
+from django.urls import path
 
 from radioco.schedules import views
 
 urlpatterns = [
-    url(r'^$', views.schedule_list, name='list'),
+    path('', views.schedule_list, name='list'),
 ]

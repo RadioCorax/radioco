@@ -18,21 +18,21 @@
 import re
 
 from django import forms
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
 from django.contrib.auth import get_user
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 from django.core import validators
 from django.http import HttpResponseRedirect
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from radioco.users.models import UserProfile
 
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
-    from django.utils.encoding import force_text as force_unicode
+    from django.utils.encoding import force_str as force_unicode
 
 
 # USER
@@ -96,6 +96,7 @@ class NonStaffUserProfileForm(forms.ModelForm):
         return username
 
 
+@admin.register(UserProfile)
 class SingletonProfileAdmin(admin.ModelAdmin):
     form = NonStaffUserProfileForm
     fields = ['username', 'first_name', 'last_name', 'email', 'bio', 'avatar', 'display_personal_page']
@@ -120,11 +121,11 @@ class SingletonProfileAdmin(admin.ModelAdmin):
             'model_name': self.model._meta.model_name,
         }
         custom_urls = [
-            url(r'^history/$',
+            path('history/',
                 self.admin_site.admin_view(self.history_view),
                 {'object_id': '-1'},
                 name='%s_history' % url_name_prefix),
-            url(r'^$',
+            path('',
                 self.admin_site.admin_view(self.change_view),
                 {'object_id': '-1'},
                 name='%s_change' % url_name_prefix)]
@@ -150,4 +151,3 @@ class SingletonProfileAdmin(admin.ModelAdmin):
         )
 
 
-admin.site.register(UserProfile, SingletonProfileAdmin)
