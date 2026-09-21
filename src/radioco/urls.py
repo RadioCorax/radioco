@@ -22,39 +22,37 @@ from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
-from filebrowser.sites import site as filebrowser_site
 
-admin.site.site_header = _('RadioCo administration')
-admin.site.site_title = _('RadioCo site admin')
+admin.site.site_header = _("RadioCo administration")
+admin.site.site_title = _("RadioCo site admin")
 
 
 urlpatterns = [
-    path('grappelli/', include('grappelli.urls')),
-    path('filebrowser/', filebrowser_site.urls),
-    path('ckeditor/', include('ckeditor_uploader.urls')),
-
-    path('api/2/', include('radioco.api.urls', namespace="api")),
-
-    path('password_reset/',
-         auth_views.PasswordResetView.as_view(),
-         name='admin_password_reset'),
-    path('password_reset/done/',
-         auth_views.PasswordResetDoneView.as_view(),
-         name='password_reset_done'),
-    path('reset/<uidb64>/<token>/',
-         auth_views.PasswordResetConfirmView.as_view(),
-         name='password_reset_confirm'),
-    path('reset/done/',
-         auth_views.PasswordResetCompleteView.as_view(),
-         name='password_reset_complete'),
-
-    path('', admin.site.urls),
+    path("grappelli/", include("grappelli.urls")),
+    path("ckeditor/", include("ckeditor_uploader.urls")),
+    path("api/2/", include("radioco.api.urls", namespace="api")),
+    path(
+        "password_reset/",
+        auth_views.PasswordResetView.as_view(),
+        name="admin_password_reset",
+    ),
+    path(
+        "password_reset/done/",
+        auth_views.PasswordResetDoneView.as_view(),
+        name="password_reset_done",
+    ),
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
+    path(
+        "reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
+    path("", admin.site.urls),
 ]
-
-if settings.DEBUG and 'debug_toolbar' in settings.INSTALLED_APPS:
-    import debug_toolbar
-
-    urlpatterns += [path(r'^__debug__/', include(debug_toolbar.urls))]
 
 # Media
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

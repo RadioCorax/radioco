@@ -39,19 +39,6 @@ wheels = [
 ]
 
 [[package]]
-name = "django-filebrowser"
-version = "5.0.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "django-grappelli" },
-    { name = "pillow" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/6c/11/2d46f31285fb4de46f302a7cf9addd3be1db723c59355bb7ed45338f0241/django_filebrowser-5.0.0.tar.gz", hash = "sha256:0da016aeea8be0e51050aae9467e81ca4508f803bc1e97bc0c5df78ed04196bc", size = 8734404, upload-time = "2026-07-27T14:06:29.581Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/e0/55/2ff485873e258ee6ae1c1f8109c3f0cf5aec50b4e0537bd5837c00122628/django_filebrowser-5.0.0-py3-none-any.whl", hash = "sha256:d94aa0991bc1f9b64c320ca673a1ffdbc4c2dfa029e47a6f89472a303fcb754d", size = 2022383, upload-time = "2026-07-27T14:06:23.83Z" },
-]
-
-[[package]]
 name = "django-filter"
 version = "26.1"
 source = { registry = "https://pypi.org/simple" }
@@ -199,12 +186,12 @@ source = { editable = "." }
 dependencies = [
     { name = "django" },
     { name = "django-ckeditor" },
-    { name = "django-filebrowser" },
     { name = "django-filter" },
     { name = "django-grappelli" },
     { name = "django-npm" },
     { name = "django-recurrence" },
     { name = "djangorestframework" },
+    { name = "pillow" },
     { name = "whitenoise" },
 ]
 
@@ -217,12 +204,12 @@ dev = [
 requires-dist = [
     { name = "django", specifier = ">=6.1.1" },
     { name = "django-ckeditor", specifier = ">=6.7.3" },
-    { name = "django-filebrowser", specifier = ">=5.0.0" },
     { name = "django-filter", specifier = ">=26.1" },
     { name = "django-grappelli", specifier = ">=4.0.4" },
     { name = "django-npm", specifier = ">=1.0.1" },
     { name = "django-recurrence", specifier = ">=1.14" },
     { name = "djangorestframework", specifier = ">=3.18.1" },
+    { name = "pillow", specifier = ">=12.3.0" },
     { name = "whitenoise", specifier = ">=6.12.0" },
 ]
 

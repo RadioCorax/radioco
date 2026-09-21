@@ -1,6 +1,7 @@
 # django collectstatic files
 radioco/media/_versions/
 static/
+media/
 
 # bower / js libs
 node_modules/
