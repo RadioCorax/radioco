@@ -16,8 +16,8 @@
 
 
 import datetime
+from unittest import mock
 
-import mock
 import recurrence
 from django.core.exceptions import ValidationError
 from django.test import TestCase

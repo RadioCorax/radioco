@@ -16,12 +16,12 @@
 
 
 import datetime
-import mock
+from unittest import mock
 
 from django.utils import timezone
 
-from radioco.programmes.models import Programme
 from radioco.example.utils import example
+from radioco.programmes.models import Programme
 
 
 def now():
@@ -30,7 +30,7 @@ def now():
 
 class TestDataMixin(object):
     @classmethod
-    @mock.patch('django.utils.timezone.now', now)
+    @mock.patch("django.utils.timezone.now", now)
     def setUpTestData(cls):
         example.create_example_data()
         cls.programme = Programme.objects.get(name="Classic hits")

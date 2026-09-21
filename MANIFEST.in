@@ -1,8 +1,0 @@
-include LICENSE
-include README.rst
-recursive-include radioco *
-recursive-exclude * *.pyc
-recursive-exclude * *~
-recursive-exclude radioco media *
-recursive-exclude static *
-exclude radioco/db.*
