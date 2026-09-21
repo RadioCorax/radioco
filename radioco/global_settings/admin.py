@@ -15,19 +15,20 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.conf.urls import url
+from django.urls import path
 from django.contrib import admin
 from django.http import HttpResponseRedirect
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 from radioco.global_settings.models import SiteConfiguration, PodcastConfiguration, CalendarConfiguration
 
 try:
     from django.utils.encoding import force_unicode
 except ImportError:
-    from django.utils.encoding import force_text as force_unicode
+    from django.utils.encoding import force_str as force_unicode
 
 
+@admin.register(CalendarConfiguration, SiteConfiguration)
 class SingletonModelAdmin(admin.ModelAdmin):
     def has_add_permission(self, request):
         return False
@@ -42,13 +43,13 @@ class SingletonModelAdmin(admin.ModelAdmin):
             'model_name': self.model._meta.model_name,
         }
         custom_urls = [
-            url(
-                r'^history/$',
+            path(
+                'history/',
                 self.admin_site.admin_view(self.history_view),
                 {'object_id': '1'},
                 name='%s_history' % url_name_prefix),
-            url(
-                r'^$',
+            path(
+                '',
                 self.admin_site.admin_view(self.change_view),
                 {'object_id': '1'},
                 name='%s_change' % url_name_prefix)]
@@ -75,11 +76,9 @@ class SingletonModelAdmin(admin.ModelAdmin):
         )
 
 
+@admin.register(PodcastConfiguration)
 class PodcastConfigurationAdmin(SingletonModelAdmin):
     readonly_fields = ['recorder_token']
     pass
 
 
-admin.site.register(SiteConfiguration, SingletonModelAdmin)
-admin.site.register(CalendarConfiguration, SingletonModelAdmin)
-admin.site.register(PodcastConfiguration, PodcastConfigurationAdmin)

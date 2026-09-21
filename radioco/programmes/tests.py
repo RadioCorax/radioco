@@ -15,29 +15,29 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 import datetime
-import mock
 
+import mock
 from django.contrib.admin.options import ModelAdmin
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase
 from django.utils import timezone
 
-from radioco.programmes.models import Programme, Episode, EpisodeManager
+from radioco.programmes.models import Episode, EpisodeManager, Programme
 from radioco.test.utils import TestDataMixin, now
 
 
 class ProgrammeModelTests(TestCase):
-    @mock.patch('django.utils.timezone.now', now)
+    @mock.patch("django.utils.timezone.now", now)
     def setUp(self):
         self.programme = Programme.objects.create(
             name="Test programme",
             synopsis="This is a description",
             website="http://foo.example",
-            current_season=1)
+            current_season=1,
+        )
 
     def test_save_programme(self):
-        self.assertEqual(
-            self.programme, Programme.objects.get(id=self.programme.id))
+        self.assertEqual(self.programme, Programme.objects.get(id=self.programme.id))
 
     def test_slug(self):
         self.assertEqual(self.programme.slug, "test-programme")
@@ -48,12 +48,14 @@ class ProgrammeModelTests(TestCase):
     def test_created_at(self):
         self.assertEqual(
             self.programme.created_at,
-            timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0, 0)))
+            timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0, 0)),
+        )
 
     def test_updated_at(self):
         self.assertEqual(
             self.programme.updated_at,
-            timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0, 0)))
+            timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0, 0)),
+        )
 
     def test_str(self):
         self.assertEqual(str(self.programme), "Test programme")
@@ -65,9 +67,19 @@ class ProgrammeModelAdminTests(TestCase):
 
     def test_fieldset(self):
         ma = ModelAdmin(Programme, self.site)
-        self.assertEqual(ma.get_fields(None), [
-            'name', 'synopsis', 'photo', 'language', 'current_season',
-            'category', 'website', 'slug'])
+        self.assertEqual(
+            ma.get_fields(None),
+            [
+                "name",
+                "synopsis",
+                "photo",
+                "language",
+                "current_season",
+                "category",
+                "website",
+                "slug",
+            ],
+        )
 
 
 class EpisodeManagerTests(TestDataMixin, TestCase):
@@ -76,7 +88,8 @@ class EpisodeManagerTests(TestDataMixin, TestCase):
 
         self.episode = self.manager.create_episode(
             timezone.make_aware(datetime.datetime(2014, 6, 14, 10, 0, 0)),
-            self.programme)
+            self.programme,
+        )
 
     def test_create_episode(self):
         self.assertIsInstance(self.episode, Episode)
@@ -90,11 +103,13 @@ class EpisodeManagerTests(TestDataMixin, TestCase):
     def test_issue_date(self):
         self.assertEqual(
             self.episode.issue_date,
-            timezone.make_aware(datetime.datetime(2014, 6, 14, 10, 0, 0)))
+            timezone.make_aware(datetime.datetime(2014, 6, 14, 10, 0, 0)),
+        )
 
     def test_people(self):
-        self.assertQuerysetEqual(
-            self.episode.people.all(), self.programme.announcers.all())
+        self.assertQuerySetEqual(
+            self.episode.people.all(), self.programme.announcers.all()
+        )
 
     def test_last(self):
         episode = self.manager.last(self.programme)
@@ -102,34 +117,41 @@ class EpisodeManagerTests(TestDataMixin, TestCase):
         self.assertEqual(episode.number_in_season, 6)
 
     def test_last_none(self):
-        episode = self.manager.last(Programme())
+        programme = Programme(name="Another Name", current_season=1)
+        programme.save()
+
+        episode = self.manager.last(programme)
         self.assertIsNone(episode)
 
     def test_unfinished(self):
         episodes = self.manager.unfinished(
-            self.programme, timezone.make_aware(datetime.datetime(2015, 1, 1)))
+            self.programme, timezone.make_aware(datetime.datetime(2015, 1, 1))
+        )
         self.assertEqual(
             next(episodes).issue_date,
-            timezone.make_aware(datetime.datetime(2015, 1, 1, 14, 0)))
+            timezone.make_aware(datetime.datetime(2015, 1, 1, 14, 0)),
+        )
 
     def test_unfinished_none(self):
-        episodes = self.manager.unfinished(Programme())
+        programme = Programme(name="Another Name", current_season=1)
+        programme.save()
+
+        episodes = self.manager.unfinished(programme)
         with self.assertRaises(StopIteration):
             next(episodes)
 
 
 class EpisodeModelTests(TestCase):
-
-    @mock.patch('django.utils.timezone.now', now)
+    @mock.patch("django.utils.timezone.now", now)
     def setUp(self):
         self.programme = Programme.objects.create(
-            name="Test programme",
-            synopsis="This is a description",
-            current_season=8)
+            name="Test programme", synopsis="This is a description", current_season=8
+        )
 
         self.episode = Episode.objects.create_episode(
             timezone.make_aware(datetime.datetime(2014, 1, 14, 10, 0, 0)),
-            programme=self.programme)
+            programme=self.programme,
+        )
 
     def test_model_manager(self):
         self.assertIsInstance(self.episode, Episode)
@@ -140,12 +162,14 @@ class EpisodeModelTests(TestCase):
     def test_created_at(self):
         self.assertEqual(
             self.episode.created_at,
-            timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0, 0)))
+            timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0, 0)),
+        )
 
     def test_updated_at(self):
         self.assertEqual(
             self.episode.updated_at,
-            timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0, 0)))
+            timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0, 0)),
+        )
 
     def test_str(self):
         self.assertEqual(str(self.episode), "8x1 Test programme")

@@ -25,7 +25,7 @@ from dateutil.relativedelta import relativedelta
 from django import forms
 from django.contrib import admin
 from django.forms import ValidationError
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 
 from radioco.programmes.models import (
@@ -234,6 +234,7 @@ class PodcastInline(admin.StackedInline):
     model = Podcast
 
 
+@admin.register(Episode)
 class NonStaffEpisodeAdmin(admin.ModelAdmin):
     list_display = (
         'title', 'programme_', 'season', 'number_in_season', 'issue_date')
@@ -245,9 +246,11 @@ class NonStaffEpisodeAdmin(admin.ModelAdmin):
     fields = ['programme', 'title', 'summary', 'issue_date', 'season', 'number_in_season']
     form = NonStaffEpisodeAdminForm
 
+    @admin.display(
+        ordering='programme__name'
+    )
     def programme_(self, episode):
         return episode.programme.name
-    programme_.admin_order_field = 'programme__name'
 
     def save_model(self, request, obj, form, change):
         if not obj.pk:
@@ -297,4 +300,3 @@ class NonStaffEpisodeAdmin(admin.ModelAdmin):
         return qs
 
 
-admin.site.register(Episode, NonStaffEpisodeAdmin)

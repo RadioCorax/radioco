@@ -20,8 +20,8 @@ import datetime
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
-from django.utils.translation import ugettext as _u
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext as _u
+from django.utils.translation import gettext_lazy as _
 from rest_framework.authtoken.models import Token
 
 
