@@ -18,7 +18,9 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-SITE_ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+SITE_ROOT = os.path.dirname(
+    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = "(h_$1pj(&usx%kw^m6$7*x9pnar+t_136g!3)g#+eje5r^3(!+"
