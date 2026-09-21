@@ -185,7 +185,7 @@ USERNAME_RADIOCO_RECORDER = "RadioCo_Recorder"
 
 # CKEditor
 CKEDITOR_UPLOAD_PATH = "uploads/"
-CKEDITOR_JQUERY_URL = "/".join([STATIC_URL, "jquery/dist/jquery.min.js"])
+CKEDITOR_JQUERY_URL = f"{STATIC_URL}/jquery/dist/jquery.min.js"
 
 # Available Languages
 PROGRAMME_LANGUAGES = (

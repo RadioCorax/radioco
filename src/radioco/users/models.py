@@ -28,13 +28,17 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, unique=True)
     bio = RichTextField(blank=True, verbose_name=_("biography"))
     avatar = models.ImageField(
-        upload_to='avatars/', default='defaults/default-userprofile-avatar.jpg', verbose_name=_("avatar")
+        upload_to="avatars/",
+        default="defaults/default-userprofile-avatar.jpg",
+        verbose_name=_("avatar"),
     )
-    display_personal_page = models.BooleanField(default=False, verbose_name=_("display personal page"))
+    display_personal_page = models.BooleanField(
+        default=False, verbose_name=_("display personal page")
+    )
     slug = models.SlugField(max_length=30)
 
     def get_absolute_url(self):
-        return reverse('users:detail', args=[self.slug])
+        return reverse("users:detail", args=[self.slug])
 
     def save(self, *args, **kwargs):
         if not self.pk:
@@ -44,20 +48,20 @@ class UserProfile(models.Model):
             except UserProfile.DoesNotExist:
                 pass
         self.slug = slugify(self.user.username)
-        super(UserProfile, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     class Meta:
-        default_permissions = ('change',)
-        verbose_name = _('user profile')
-        verbose_name_plural = _('user profile')
+        default_permissions = ("change",)
+        verbose_name = _("user profile")
+        verbose_name_plural = _("user profile")
 
     def __unicode__(self):
-        return "%s's profile" % self.user
+        return f"{self.user}'s profile"
 
 
 def save_slug(sender, instance=None, **kwargs):
-    if instance is not None and not kwargs.get('raw', False):
-        userprofile, created = UserProfile.objects.get_or_create(user=instance)
+    if instance is not None and not kwargs.get("raw", False):
+        userprofile, _ = UserProfile.objects.get_or_create(user=instance)
         userprofile.save()
 
 

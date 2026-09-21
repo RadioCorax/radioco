@@ -1,9 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-from django.db import migrations
 import datetime
+from typing import ClassVar
+
 import recurrence
+from django.db import migrations
 
 
 def migrate_schedules(apps, schema_editor):
@@ -16,28 +15,29 @@ def migrate_schedules(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('schedules', '0001_initial'),
+    dependencies: ClassVar = [
+        ("schedules", "0001_initial"),
     ]
 
-    operations = [
+    operations: ClassVar = [
         migrations.AddField(
-            model_name='schedule',
-            name='recurrences',
+            model_name="schedule",
+            name="recurrences",
             field=recurrence.fields.RecurrenceField(
                 default=recurrence.Recurrence(
-                    rrules=[recurrence.Rule(recurrence.WEEKLY)]),
-                verbose_name='recurrences'),
+                    rrules=[recurrence.Rule(recurrence.WEEKLY)]
+                ),
+                verbose_name="recurrences",
+            ),
             preserve_default=False,
         ),
         migrations.RunPython(migrate_schedules),
         migrations.RemoveField(
-            model_name='schedule',
-            name='day',
+            model_name="schedule",
+            name="day",
         ),
         migrations.RemoveField(
-            model_name='schedule',
-            name='start_hour',
+            model_name="schedule",
+            name="start_hour",
         ),
     ]

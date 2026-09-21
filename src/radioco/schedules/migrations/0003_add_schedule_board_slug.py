@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import ClassVar
 
 from django.db import migrations, models
 from django.template.defaultfilters import slugify
@@ -13,15 +12,14 @@ def migrate_board_slug(apps, schema_editor):
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('schedules', '0002_migrate_to_rrules'),
+    dependencies: ClassVar = [
+        ("schedules", "0002_migrate_to_rrules"),
     ]
 
-    operations = [
+    operations: ClassVar = [
         migrations.AddField(
-            model_name='scheduleboard',
-            name='slug',
+            model_name="scheduleboard",
+            name="slug",
             field=models.SlugField(null=True, max_length=255),
             preserve_default=False,
         ),

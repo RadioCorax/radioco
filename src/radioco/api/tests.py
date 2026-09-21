@@ -61,12 +61,12 @@ class TestSerializers(TestDataMixin, TestCase):
         serializer = serializers.SlotSerializer(self.slot, context={"request": None})
         self.assertDictEqual(
             serializer.data,
-            dict(
-                name="Classic hits (1:00:00)",
-                runtime="01:00:00",
-                programme="/api/2/programmes/classic-hits",
-                url="/api/2/slots/5",
-            ),
+            {
+                "name": "Classic hits (1:00:00)",
+                "runtime": "01:00:00",
+                "programme": "/api/2/programmes/classic-hits",
+                "url": "/api/2/slots/5",
+            },
         )
 
     def test_episode(self):
@@ -100,15 +100,15 @@ class TestSerializers(TestDataMixin, TestCase):
         )
         self.assertDictEqual(
             serializer.data,
-            dict(
-                type="L",
-                id=6,
-                slot="/api/2/slots/5",
-                title="Classic hits",
-                source=None,
-                start="2015-01-01T14:00:00+01:00",
-                end="2015-01-01T15:00:00+01:00",
-            ),
+            {
+                "type": "L",
+                "id": 6,
+                "slot": "/api/2/slots/5",
+                "title": "Classic hits",
+                "source": None,
+                "start": "2015-01-01T14:00:00+01:00",
+                "end": "2015-01-01T15:00:00+01:00",
+            },
         )
 
     def test_transmission(self):
@@ -202,18 +202,18 @@ class TestAPI(TestDataMixin, APITestCase):
         self.client.login(username="klaus", password="topsecret")
         response = self.client.post(
             "/api/2/schedules",
-            dict(
-                slot="http://127.0.0.1:8000/api/2/slots/5",
-                start="2017-12-26T03:00:00",
-                type="L",
-            ),
+            {
+                "slot": "http://127.0.0.1:8000/api/2/slots/5",
+                "start": "2017-12-26T03:00:00",
+                "type": "L",
+            },
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
     def test_schedules_patch(self):
         self.client.login(username="klaus", password="topsecret")
         response = self.client.patch(
-            "/api/2/schedules/1", dict(start="2017-12-26T03:00:00", type="L")
+            "/api/2/schedules/1", {"start": "2017-12-26T03:00:00", "type": "L"}
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -233,7 +233,7 @@ class TestAPI(TestDataMixin, APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            sorted(response.data, key=lambda t: t["start"])[0]["start"],
+            min(response.data, key=lambda t: t["start"])["start"],
             "2015-02-01T08:00:00+01:00",
         )
 
@@ -245,7 +245,7 @@ class TestAPI(TestDataMixin, APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(
-            sorted(response.data, key=lambda t: t["start"])[-1]["start"],
+            max(response.data, key=lambda t: t["start"])["start"],
             "2015-01-14T20:00:00+01:00",
         )
 
@@ -253,10 +253,10 @@ class TestAPI(TestDataMixin, APITestCase):
         with self.assertRaises(ValidationError):
             self.client.get(
                 "/api/2/transmissions",
-                dict(
-                    after=datetime.datetime(2015, 2, 14, 21, 0).isoformat(),
-                    before=datetime.datetime(2015, 1, 14, 21, 0).isoformat(),
-                ),
+                {
+                    "after": datetime.datetime(2015, 2, 14, 21, 0).isoformat(),
+                    "before": datetime.datetime(2015, 1, 14, 21, 0).isoformat(),
+                },
             )
 
     def test_transmission_invalid_input(self):

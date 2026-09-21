@@ -15,10 +15,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
 
-from radioco.programmes.models import Role, NOT_SPECIFIED
+from radioco.programmes.models import NOT_SPECIFIED, Role
 from radioco.users.models import UserProfile
 
 

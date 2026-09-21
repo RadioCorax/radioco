@@ -16,11 +16,11 @@
 
 
 from django.conf import settings
-from django.urls import include, path
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.urls import include, path
 from django.utils.translation import gettext_lazy as _
 from filebrowser.sites import site as filebrowser_site
 

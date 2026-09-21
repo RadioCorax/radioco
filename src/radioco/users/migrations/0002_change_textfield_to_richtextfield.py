@@ -1,21 +1,19 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import ClassVar
 
-from django.db import models, migrations
 import ckeditor.fields
+from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('users', '0001_initial'),
+    dependencies: ClassVar = [
+        ("users", "0001_initial"),
     ]
 
-    operations = [
+    operations: ClassVar = [
         migrations.AlterField(
-            model_name='userprofile',
-            name='bio',
-            field=ckeditor.fields.RichTextField(verbose_name='biography', blank=True),
+            model_name="userprofile",
+            name="bio",
+            field=ckeditor.fields.RichTextField(verbose_name="biography", blank=True),
             preserve_default=True,
         ),
     ]

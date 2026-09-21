@@ -5,13 +5,12 @@ from radioco.schedules.models import Schedule
 
 
 def available_dates(programme, after):
-    schedules = Schedule.objects.filter(
-        slot__programme=programme, type=Schedule.LIVE)
+    schedules = Schedule.objects.filter(slot__programme=programme, type=Schedule.LIVE)
 
     while True:
         candidates = filter(
-            lambda c: c is not None,
-            map(lambda s: s.date_after(after, inc=False), schedules))
+            lambda c: c is not None, (s.date_after(after, inc=False) for s in schedules)
+        )
         try:
             candidate = min(candidates)
         except ValueError:
