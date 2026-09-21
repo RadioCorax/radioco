@@ -1,18 +1,16 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import ClassVar
 
-from django.db import models, migrations
+from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('global_settings', '0001_initial'),
+    dependencies: ClassVar = [
+        ("global_settings", "0001_initial"),
     ]
 
-    operations = [
+    operations: ClassVar = [
         migrations.RemoveField(
-            model_name='calendarconfiguration',
-            name='display_next_weeks',
+            model_name="calendarconfiguration",
+            name="display_next_weeks",
         ),
     ]

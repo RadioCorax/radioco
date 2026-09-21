@@ -3,7 +3,6 @@ from rest_framework import routers
 from radioco.api import views
 from radioco.api.apps import API
 
-
 app_name = API.name
 
 router = routers.DefaultRouter(trailing_slash=False)

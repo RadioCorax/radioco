@@ -1,19 +1,17 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import ClassVar
 
 from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('programmes', '0012_auto_20171122_0911'),
+    dependencies: ClassVar = [
+        ("programmes", "0012_auto_20171122_0911"),
     ]
 
-    operations = [
+    operations: ClassVar = [
         migrations.AddField(
-            model_name='programme',
-            name='website',
+            model_name="programme",
+            name="website",
             field=models.URLField(blank=True),
         ),
     ]

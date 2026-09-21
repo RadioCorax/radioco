@@ -21,7 +21,7 @@ from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.utils import feedgenerator
 
-from radioco.programmes.models import Programme, Podcast
+from radioco.programmes.models import Podcast, Programme
 
 
 class iTunesFeed(feedgenerator.Rss201rev2Feed):
@@ -35,19 +35,19 @@ class iTunesFeed(feedgenerator.Rss201rev2Feed):
         )
 
     def rss_attributes(self):
-        attrs = super(iTunesFeed, self).rss_attributes()
+        attrs = super().rss_attributes()
         attrs['xmlns:itunes'] = 'http://www.itunes.com/dtds/podcast-1.0.dtd'
         return attrs
 
     def add_root_elements(self, handler):
-        super(iTunesFeed, self).add_root_elements(handler)
+        super().add_root_elements(handler)
         handler.addQuickElement('itunes:explicit', 'clean')
         handler.addQuickElement('itunes:summary', self.programme.synopsis)
         if self.programme.category:
             handler.addQuickElement('itunes:category', self.programme.category)
 
     def add_item_elements(self, handler, item):
-        super(iTunesFeed, self).add_item_elements(handler, item)
+        super().add_item_elements(handler, item)
 
         podcast = item["podcast"]
         handler.addQuickElement("itunes:subtitle", podcast.episode.title)

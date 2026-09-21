@@ -15,12 +15,18 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from django.urls import path
+from typing import ClassVar
+
 from django.contrib import admin
 from django.http import HttpResponseRedirect
+from django.urls import path
 from django.utils.translation import gettext as _
 
-from radioco.global_settings.models import SiteConfiguration, PodcastConfiguration, CalendarConfiguration
+from radioco.global_settings.models import (
+    CalendarConfiguration,
+    PodcastConfiguration,
+    SiteConfiguration,
+)
 
 try:
     from django.utils.encoding import force_unicode
@@ -37,38 +43,38 @@ class SingletonModelAdmin(admin.ModelAdmin):
         return False
 
     def get_urls(self):
-        urls = super(SingletonModelAdmin, self).get_urls()
-        url_name_prefix = '%(app_name)s_%(model_name)s' % {
-            'app_name': self.model._meta.app_label,
-            'model_name': self.model._meta.model_name,
-        }
+        urls = super().get_urls()
+        url_name_prefix = f"{self.model._meta.app_label}_{self.model._meta.model_name}"
         custom_urls = [
             path(
-                'history/',
+                "history/",
                 self.admin_site.admin_view(self.history_view),
-                {'object_id': '1'},
-                name='%s_history' % url_name_prefix),
+                {"object_id": "1"},
+                name=f"{url_name_prefix}_history",
+            ),
             path(
-                '',
+                "",
                 self.admin_site.admin_view(self.change_view),
-                {'object_id': '1'},
-                name='%s_change' % url_name_prefix)]
+                {"object_id": "1"},
+                name=f"{url_name_prefix}_change",
+            ),
+        ]
         # By inserting the custom URLs first, we overwrite the standard URLs.
         return custom_urls + urls
 
     def response_change(self, request, obj):
-        msg = _('%(obj)s was changed successfully.') % {'obj': force_unicode(obj)}
-        if '_continue' in request.POST:
+        msg = _("%(obj)s was changed successfully.") % {"obj": force_unicode(obj)}
+        if "_continue" in request.POST:
             self.message_user(request, msg)
             return HttpResponseRedirect(request.path)
         else:
             self.message_user(request, msg)
             return HttpResponseRedirect("../../")
 
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-        if object_id == '1':
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        if object_id == "1":
             self.model.objects.get_or_create(pk=1)
-        return super(SingletonModelAdmin, self).change_view(
+        return super().change_view(
             request,
             object_id,
             form_url,
@@ -78,7 +84,4 @@ class SingletonModelAdmin(admin.ModelAdmin):
 
 @admin.register(PodcastConfiguration)
 class PodcastConfigurationAdmin(SingletonModelAdmin):
-    readonly_fields = ['recorder_token']
-    pass
-
-
+    readonly_fields: ClassVar = ["recorder_token"]

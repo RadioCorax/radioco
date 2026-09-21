@@ -15,6 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+from typing import ClassVar
+
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -24,42 +26,46 @@ from radioco.schedules.wrapper import RecurrenceFieldWrapper
 
 class Slot(models.Model):
     programme = models.ForeignKey(
-        Programme, on_delete=models.CASCADE, verbose_name=_("programme"))
+        Programme, on_delete=models.CASCADE, verbose_name=_("programme")
+    )
     runtime = models.DurationField(
-        verbose_name=_("runtime"), help_text=_("runtime in seconds"))
+        verbose_name=_("runtime"), help_text=_("runtime in seconds")
+    )
 
     class Meta:
-        ordering = ["programme__name"]
+        ordering: ClassVar = ["programme__name"]
 
     def __str__(self):
-        return "{:s} ({:s})".format(self.programme.name, str(self.runtime))
+        return f"{self.programme.name:s} ({self.runtime!s:s})"
 
 
 class Schedule(models.Model):
-    LIVE = 'L'
-    BROADCAST = 'B'
-    BROADCAST_SYNDICATION = 'S'
-    REPETITION = 'R'
+    LIVE = "L"
+    BROADCAST = "B"
+    BROADCAST_SYNDICATION = "S"
+    REPETITION = "R"
     SCHEDULE_TYPE = (
         (LIVE, _("live")),
         (BROADCAST, _("broadcast")),
         (BROADCAST_SYNDICATION, _("broadcast syndication")),
-        (REPETITION, _("repetition")))
+        (REPETITION, _("repetition")),
+    )
 
     class Meta:
-        verbose_name = _('schedule')
-        verbose_name_plural = _('schedules')
+        verbose_name = _("schedule")
+        verbose_name_plural = _("schedules")
 
-    slot = models.ForeignKey(
-        Slot, on_delete=models.CASCADE, verbose_name=_("slot"))
-    type = models.CharField(
-        verbose_name=_("type"), choices=SCHEDULE_TYPE, max_length=1)
+    slot = models.ForeignKey(Slot, on_delete=models.CASCADE, verbose_name=_("slot"))
+    type = models.CharField(verbose_name=_("type"), choices=SCHEDULE_TYPE, max_length=1)
     recurrences = RecurrenceFieldWrapper(verbose_name=_("recurrences"))
     source = models.ForeignKey(
-        'self', blank=True, null=True,
+        "self",
+        blank=True,
+        null=True,
         on_delete=models.SET_NULL,
         verbose_name=_("source"),
-        help_text=_("It is used when is a broadcast."))
+        help_text=_("It is used when is a broadcast."),
+    )
 
     @property
     def runtime(self):
@@ -81,7 +87,7 @@ class Schedule(models.Model):
 
     def dates_between(self, after, before):
         """
-            Return a sorted list of dates between after and before
+        Return a sorted list of dates between after and before
         """
         return self.recurrences.between(after, before, inc=True)
 
@@ -92,11 +98,10 @@ class Schedule(models.Model):
         return self.recurrences.after(after, inc=inc)
 
     def __str__(self):
-        return ' - '.join(
-            [self.start.strftime('%A'), self.start.strftime('%X')])
+        return " - ".join([self.start.strftime("%A"), self.start.strftime("%X")])
 
 
-class Transmission(object):
+class Transmission:
     @classmethod
     def at(cls, at):
         schedules = Schedule.objects.all()
@@ -134,11 +139,10 @@ class Transmission(object):
         try:
             if self.type == Schedule.REPETITION:
                 _episodes = Episode.objects.filter(
-                    programme=self.programme,
-                    issue_date__lt=self.start)
-                return _episodes.latest('issue_date')
+                    programme=self.programme, issue_date__lt=self.start
+                )
+                return _episodes.latest("issue_date")
 
-            return Episode.objects.get(
-                programme=self.programme, issue_date=self.start)
+            return Episode.objects.get(programme=self.programme, issue_date=self.start)
         except Episode.DoesNotExist:
             return None

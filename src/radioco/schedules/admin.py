@@ -15,8 +15,9 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-from radioco.schedules.models import Schedule, Slot
 from django.contrib import admin
+
+from radioco.schedules.models import Schedule, Slot
 
 
 @admin.register(Slot)

@@ -28,7 +28,7 @@ def now():
     return timezone.make_aware(datetime.datetime(2014, 1, 1, 13, 30, 0))
 
 
-class TestDataMixin(object):
+class TestDataMixin:
     @classmethod
     @mock.patch("django.utils.timezone.now", now)
     def setUpTestData(cls):

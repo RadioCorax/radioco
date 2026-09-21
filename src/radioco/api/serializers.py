@@ -1,6 +1,7 @@
-from radioco.programmes.models import Programme, Episode
-from radioco.schedules.models import Slot, Schedule
 from rest_framework import serializers
+
+from radioco.programmes.models import Episode, Programme
+from radioco.schedules.models import Schedule, Slot
 
 
 class ProgrammeSerializer(serializers.HyperlinkedModelSerializer):

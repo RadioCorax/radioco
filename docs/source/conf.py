@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #
 # django-radio documentation build configuration file, created by
 # sphinx-quickstart on Sat Nov 22 13:03:09 2014.
@@ -12,8 +11,8 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
-import sys
 import os
+import sys
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -45,8 +44,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'RadioCo'
-copyright = u'2014, Iago Veloso Abalo'
+project = 'RadioCo'
+copyright = '2014, Iago Veloso Abalo'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -230,8 +229,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'django-radio.tex', u'django-radio Documentation',
-   u'Iago Veloso Abalo', 'manual'),
+  ('index', 'django-radio.tex', 'django-radio Documentation',
+   'Iago Veloso Abalo', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -260,8 +259,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'django-radio', u'django-radio Documentation',
-     [u'Iago Veloso Abalo'], 1)
+    ('index', 'django-radio', 'django-radio Documentation',
+     ['Iago Veloso Abalo'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -274,8 +273,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'django-radio', u'django-radio Documentation',
-   u'Iago Veloso Abalo', 'django-radio', 'One line description of project.',
+  ('index', 'django-radio', 'django-radio Documentation',
+   'Iago Veloso Abalo', 'django-radio', 'One line description of project.',
    'Miscellaneous'),
 ]
 

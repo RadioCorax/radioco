@@ -12,7 +12,7 @@ implementation.
 
 class RecurrenceFieldWrapper(RecurrenceField):
     def to_python(self, value):
-        recurrence = super(RecurrenceFieldWrapper, self).to_python(value)
+        recurrence = super().to_python(value)
         return RecurrenceWrapper(recurrence)
 
 
@@ -39,7 +39,7 @@ class RecurrenceWrapper(Recurrence):
         if dtstart and timezone.is_aware(dtstart):
             dtstart = timezone.make_naive(dtstart)
 
-        super(RecurrenceWrapper, self).__init__(
+        super().__init__(
             dtstart=dtstart,
             dtend=recurrence.dtend,
             rrules=recurrence.rrules,
@@ -53,7 +53,7 @@ class RecurrenceWrapper(Recurrence):
         if timezone.is_aware(dt):
             dt = timezone.make_naive(dt)
 
-        _dt = super(RecurrenceWrapper, self).before(dt, **kwargs)
+        _dt = super().before(dt, **kwargs)
         if _dt:
             return timezone.make_aware(_dt)
         return None
@@ -62,7 +62,7 @@ class RecurrenceWrapper(Recurrence):
         if timezone.is_aware(dt):
             dt = timezone.make_naive(dt)
 
-        _dt = super(RecurrenceWrapper, self).after(dt, **kwargs)
+        _dt = super().after(dt, **kwargs)
         if _dt:
             return timezone.make_aware(_dt)
         return None
@@ -74,6 +74,6 @@ class RecurrenceWrapper(Recurrence):
         if timezone.is_aware(before):
             before = timezone.make_naive(before)
 
-        for dt in super(RecurrenceWrapper, self).between(after, before, **kwargs):
+        for dt in super().between(after, before, **kwargs):
             # XXX does not raise on time change any longer
             yield timezone.make_aware(dt)

@@ -1,20 +1,23 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import ClassVar
 
-from django.db import models, migrations
+from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('global_settings', '0002_remove_calendarconfiguration_display_next_weeks'),
+    dependencies: ClassVar = [
+        ("global_settings", "0002_remove_calendarconfiguration_display_next_weeks"),
     ]
 
-    operations = [
+    operations: ClassVar = [
         migrations.AddField(
-            model_name='siteconfiguration',
-            name='footer',
-            field=models.TextField(default=b'', help_text='Can contain raw HTML.', verbose_name='Footer', blank=True),
+            model_name="siteconfiguration",
+            name="footer",
+            field=models.TextField(
+                default=b"",
+                help_text="Can contain raw HTML.",
+                verbose_name="Footer",
+                blank=True,
+            ),
             preserve_default=True,
         ),
     ]

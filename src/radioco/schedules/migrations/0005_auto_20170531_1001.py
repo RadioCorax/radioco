@@ -1,21 +1,19 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import ClassVar
 
 from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('schedules', '0004_unique_schedule_board_slug'),
+    dependencies: ClassVar = [
+        ("schedules", "0004_unique_schedule_board_slug"),
     ]
 
-    operations = [
+    operations: ClassVar = [
         migrations.RemoveField(
-            model_name='schedule',
-            name='schedule_board',
+            model_name="schedule",
+            name="schedule_board",
         ),
         migrations.DeleteModel(
-            name='ScheduleBoard',
+            name="ScheduleBoard",
         ),
     ]

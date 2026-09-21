@@ -1,22 +1,20 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
+from typing import ClassVar
 
-from django.db import migrations, models
+from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
-    dependencies = [
-        ('programmes', '0008_auto_20160116_1509'),
+    dependencies: ClassVar = [
+        ("programmes", "0008_auto_20160116_1509"),
     ]
 
-    operations = [
+    operations: ClassVar = [
         migrations.RemoveField(
-            model_name='programme',
-            name='end_date',
+            model_name="programme",
+            name="end_date",
         ),
         migrations.RemoveField(
-            model_name='programme',
-            name='start_date',
+            model_name="programme",
+            name="start_date",
         ),
     ]
