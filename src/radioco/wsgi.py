@@ -13,7 +13,7 @@ settings.configure(
     SECRET_KEY=env("SECRET_KEY"),
     DATABASES={"default": env.dj_db_url("DATABASE_URL")},
     ALLOWED_HOSTS=env.list("ALLOWED_HOSTS"),
-    CRFS_TRUSTED_ORIGINS=env.list("CSRF_TRUSTED_ORIGINS"),
+    CSRF_TRUSTED_ORIGINS=env.list("CSRF_TRUSTED_ORIGINS"),
     TIME_ZONE=env("TIME_ZONE", default="Europe/Berlin"),
     LANGUAGE_CODE=env("LANGUAGE_CODE", default="de"),
     LOGGING={
