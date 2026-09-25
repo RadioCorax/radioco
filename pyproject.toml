@@ -30,6 +30,7 @@ dependencies = [
     "django-recurrence>=1.14",
     "django-solo>=2.5.1",
     "djangorestframework>=3.18.1",
+    "environs[django]>=15.2.0",
     "gunicorn>=26.2.0",
     "pillow>=12.3.0",
     "whitenoise>=6.12.0",

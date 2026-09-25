@@ -14,16 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
-SITE_ROOT = os.path.dirname(
-    os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-)
+from django.conf.global_settings import *
+
+SITE_ROOT = os.getcwd()
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "(h_$1pj(&usx%kw^m6$7*x9pnar+t_136g!3)g#+eje5r^3(!+"
+SECRET_KEY = "snakeoil"
 
 DEBUG = True
 
@@ -42,6 +40,7 @@ INSTALLED_APPS = (
     "recurrence",
     "rest_framework",
     "rest_framework.authtoken",
+    "solo",
     # Local Project Apps
     "radioco.api.apps.API",
     "radioco.users.apps.Users",
@@ -109,12 +108,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = "en"
-
-TIME_ZONE = "Europe/Berlin"
-
 USE_I18N = True
-
 
 USE_TZ = True
 
@@ -149,9 +143,17 @@ CKEDITOR_JQUERY_URL = f"{STATIC_URL}/jquery/dist/jquery.min.js"
 
 # Available Languages
 PROGRAMME_LANGUAGES = (
-    ("es", "Spanish"),
+    ("ar", "Arabic"),
+    ("de", "German"),
     ("en", "English"),
+    ("es", "Spanish"),
+    ("fa", "Persian"),
+    ("ff", "Fulah"),
+    ("fr", "French"),
     ("gl", "Galician"),
+    ("pt", "Portuguese"),
+    ("ro", "Romanian"),
+    ("rom", "Romany"),
 )
 
 # Admin
