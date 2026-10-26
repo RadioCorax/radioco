@@ -82,11 +82,11 @@ wheels = [
 
 [[package]]
 name = "django-grappelli"
-version = "5.0.0"
+version = "5.0.1"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/cb/bb/66bb27b016f46579ae6d735698bfb62ce408554cdb8dbedf2f02e7e6482b/django_grappelli-5.0.0.tar.gz", hash = "sha256:404c8480024758b537bed723070c64eef695de557ad470b43161dbff0aa4c642", size = 1507044, upload-time = "2026-04-29T09:29:39.341Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e6/8b/885242eb925e25e3e6b49fa4e6341d38b5af260a11767da2de8734542994/django_grappelli-5.0.1.tar.gz", hash = "sha256:f291d5c596b0e1fc1e0e1bf819f472503c194a4ae3dfdd35b5b4c0a3bb67c101", size = 1536615, upload-time = "2026-10-16T12:35:13.43Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/37/17/26509594f6cce283c5a18c49f5335c0bce1d509aa74d0461d1ed68239f0c/django_grappelli-5.0.0-py3-none-any.whl", hash = "sha256:579e1e309ac1369d559dbe3f752ccf1cab0216ebfa6334cdba6922aab6cfa360", size = 1820928, upload-time = "2026-04-29T09:29:35.755Z" },
+    { url = "https://files.pythonhosted.org/packages/40/f2/40eba7b8a614e23a9b943a68ceeae954768f300a0f5018b1c40f126c0e1b/django_grappelli-5.0.1-py3-none-any.whl", hash = "sha256:299d301f109d2aec91027f9e40a0b254d2cfe9da0db18271a07a8c2e07173943", size = 1849110, upload-time = "2026-10-16T12:35:11.125Z" },
 ]
 
 [[package]]
